@@ -26,11 +26,11 @@ from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('api/v1/halls/', include('halls.api.urls', namespace='halls')),
-    # path('api/v1/user/', include('users.api.urls', namespace='users')),
-    # path('api/v1/exam/', include('exams.api.urls', namespace='exams')),
-    # path('api/v1/class/', include('classes.api.urls', namespace='classes')),
-    # path('api/v1/scheduling/', include('schedulings.api.urls', namespace='schedulings')),
+    path('api/hall/', include('halls.api.urls', namespace='halls')),
+    # path('api/user/', include('users.api.urls', namespace='users')),
+    path('api/exam/', include('exams.api.urls', namespace='exams')),
+    path('api/class/', include('classes.api.urls', namespace='classes')),
+    path('api/scheduling/', include('schedulings.api.urls', namespace='schedulings')),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
