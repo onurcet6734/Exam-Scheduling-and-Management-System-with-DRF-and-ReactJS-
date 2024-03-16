@@ -10,7 +10,9 @@ Windows ta
 
 pip install virtualenvwrapper-win
 
-mkvirtualenv myenv veya .\env\Scripts\activate
+mkvirtualenv myenv veya .\env\Scripts\activate 
+
+ide de environment aktif ederken hata alıyorsan, "Set-ExecutionPolicy RemoteSigned -Scope Process" komutu sonrası environment aktif edebilirsin
 _________________________________________
 Mac te 
 
