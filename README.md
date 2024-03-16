@@ -4,9 +4,9 @@ git clone https://github.com/onurcet6734/SDAEsandMS.git
 ________________________________________
 Windows ta 
 
-python -m venv env
+pip install virtualenvwrapper-win
 
-.\env\Scripts\activate
+mkvirtualenv myenv veya .\env\Scripts\activate
 _________________________________________
 Mac te 
 
