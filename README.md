@@ -3,6 +3,7 @@ projeyi çalıitırmak için
 git clone https://github.com/onurcet6734/SDAEsandMS.git
 ________________________________________
 Windows ta 
+
 python -m venv env
 
 .\env\Scripts\activate
