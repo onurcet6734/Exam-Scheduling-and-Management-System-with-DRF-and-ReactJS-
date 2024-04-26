@@ -2,22 +2,34 @@ from rest_framework import serializers
 from schedulings.models import Scheduling
 
 class SchedulingSerializer(serializers.ModelSerializer):
+    
+    #get class name into classid
+    classid = serializers.StringRelatedField()
+
     class Meta:
         model = Scheduling
-        fields = '__all__'
+        fields =  '__all__'
 
     def create(self, validated_data):
         return super().create(validated_data)
     
     def update(self, instance, validated_data):
-        instance.classid = validated_data.get('classid', instance.classid)
-        instance.school_number = validated_data.get('school_number', instance.school_number),
-        instance.exam_start_date = validated_data.get('exam_start_date', instance.exam_start_date),
-        instance.exam_finish_date = validated_data.get('exam_finish_date', instance.exam_finish_date),
-        instance.hallid = validated_data.get('hallid', instance.hallid),
-        instance.examid = validated_data.get('examid', instance.examid),
-        instance.user = validated_data.get('user', instance.user)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
         instance.save()
         return instance
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['className'] = instance.classid.name  
+        representation['HallName'] = instance.hallid.name  
+        representation['ExamName'] = instance.examid.name  
+        representation['UserName'] = instance.user.username
+        representation.pop('classid')
+        representation.pop('hallid')
+        representation.pop('examid')
+        representation.pop('user')
+
+        return representation
 
     

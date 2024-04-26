@@ -1,4 +1,5 @@
 from rest_framework import generics
+from schedulings.api.permissions import IsSuperUserOrReadOnly
 from schedulings.models import Scheduling
 from .serializers import SchedulingSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -9,7 +10,7 @@ from rest_framework import status
 class SchedulingListCreateView(generics.ListCreateAPIView):
     queryset = Scheduling.objects.all()
     serializer_class = SchedulingSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSuperUserOrReadOnly]
 
     def post(self, request, *args, **kwargs):
         import ipdb; ipdb.set_trace()
@@ -31,5 +32,5 @@ class SchedulingListCreateView(generics.ListCreateAPIView):
 class SchedulingUpdateDeleteDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Scheduling.objects.all()
     serializer_class = SchedulingSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSuperUserOrReadOnly]
 
