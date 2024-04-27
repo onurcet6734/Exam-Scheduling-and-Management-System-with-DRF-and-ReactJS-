@@ -15,3 +15,6 @@ class Classes(BaseModel):
     year = models.IntegerField()
     semester = models.IntegerField()
     count_of_students = models.IntegerField()
+
+    def __str__(self):
+        return self.name

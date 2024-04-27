@@ -13,3 +13,6 @@ class BaseModel(models.Model):
 class Hall(BaseModel):
     name = models.CharField(max_length=50)
     number_of_seats = models.IntegerField()
+
+    def __str__(self):
+        return self.name

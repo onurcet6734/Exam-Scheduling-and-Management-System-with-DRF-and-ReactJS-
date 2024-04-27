@@ -27,4 +27,9 @@ class Scheduling(BaseModel):
     def save(self, *args, **kwargs):
         self.duration = (self.exam_finish_date - self.exam_start_date).seconds/60
         super(Scheduling, self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return f"{self.school_number} - {self.classid.name}"
+    
+    #show class name in admin
 
