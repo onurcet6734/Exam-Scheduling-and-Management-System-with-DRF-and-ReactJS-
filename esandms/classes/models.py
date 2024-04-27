@@ -17,4 +17,4 @@ class Classes(BaseModel):
     count_of_students = models.IntegerField()
 
     def __str__(self):
-        return self.name
+        return self.name + " " + str(self.year) + ".Sinif " + str(self.semester)+ ".Dönem"

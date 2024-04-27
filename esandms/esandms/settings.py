@@ -39,15 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'rest_framework',
     'halls',
     'accounts',
     'exams',
     'classes',
     'schedulings',
+    'django_extensions',
 ]
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication'
     ],
@@ -107,7 +111,7 @@ DATABASES = {
         'NAME': 'ESandMSdb',
         'USER': 'postgres',
         'PASSWORD': '1234',
-        'PORT': '8000',
+        'PORT': '5432',
     }
 }
 
