@@ -9,7 +9,7 @@ from halls.api.permissions import IsSuperUserOrReadOnly
 class HallsListCreateView(generics.ListCreateAPIView):
     queryset = Hall.objects.all()
     serializer_class = HallsSerializer
-    permission_classes = [IsSuperUserOrReadOnly]
+    # permission_classes = [IsSuperUserOrReadOnly]
 
 class HallsUpdateDeleteDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Hall.objects.all()

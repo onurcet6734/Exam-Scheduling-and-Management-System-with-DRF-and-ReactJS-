@@ -1,5 +1,5 @@
 from rest_framework import generics
-from schedulings.api.permissions import IsSuperUserOrReadOnly
+from schedulings.api.permissions import IsSuperUserOrReadOnly, IsOwner
 from schedulings.models import Scheduling
 from .serializers import SchedulingSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -7,15 +7,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-
-
-
+from rest_framework.authtoken.models import Token, TokenProxy
 
 
 class SchedulingListCreateView(generics.ListCreateAPIView):
     queryset = Scheduling.objects.all()
     serializer_class = SchedulingSerializer
     permission_classes = [IsSuperUserOrReadOnly]
+    
 
     def post(self, request, *args, **kwargs):
         import ipdb; ipdb.set_trace()
@@ -42,7 +41,7 @@ class SchedulingUpdateDeleteDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class ShowStudentSchedule(generics.ListAPIView):
     serializer_class = SchedulingSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwner]
 
     def get_queryset(self):
         return Scheduling.objects.filter(user=self.request.user)
