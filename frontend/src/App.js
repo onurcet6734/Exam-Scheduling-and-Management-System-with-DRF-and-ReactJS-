@@ -7,8 +7,7 @@ class Login extends React.Component {
   state = {
     username: '',
     password: '',
-    token: null,  // State for the token
-    schedule: null,  // State for the schedule data
+    token: null,  
   }
 
   handleInputChange = (event) => {
@@ -27,24 +26,23 @@ class Login extends React.Component {
   
     axios.post(`http://localhost:8000/api/token/`, user)
       .then(res => {
-        if (res.status === 200) {  // Check if the status code is 200
-          this.setState({ token: res.data.access });  // Save the token in the state
-          this.getStudentSchedule();  // Call the new method
-        }
+        this.setState({ token: res.data.access });  
+        this.getStudentSchedule(res.data.access);  
+        
       })
       .catch(error => {
         console.error(error);
       });
   }
 
-  getStudentSchedule = () => {
+  getStudentSchedule = (token) => {
     axios.get(`http://localhost:8000/api/scheduling/show-student-schedule/`, {
       headers: {
-        Authorization: `Bearer ${this.state.token}`  // Use the token from the state
+        Authorization: `Bearer ${token}`  
       }
     })
     .then(res => {
-      this.setState({ schedule: res.data });  // Save the schedule data in the state
+      this.setState({ schedule: res.data }); 
     })
     .catch(error => {
       console.error(error);
