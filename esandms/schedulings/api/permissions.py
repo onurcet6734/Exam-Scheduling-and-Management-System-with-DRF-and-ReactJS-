@@ -21,25 +21,5 @@ class IsSuperUserOrReadOnly(permissions.BasePermission):
 class IsOwner(permissions.BasePermission):
 
     def has_permission(self, request, viewn):
-        import ipdb;ipdb.set_trace()
-        payload = {
-            "username" : "berkakalin",
-            "password": "1234Qwer_"
-        }
-        current_site = get_current_site(request)
-        domain_name = current_site.domain
-        url = "http://" + domain_name + "/api/token/"
-        response= requests.post(url =url,data=payload)
-        response.json()
-        user = User.objects.get(username=payload['username'])
-        
-        if user:
-            token = Token.objects.create(user=user)
-            if token:
-                token.key = response.json()['access']
-                token.save()
-                return True
-            else:
-                return False
-        else:
-            return False
+        return request.user.is_authenticated
+    
