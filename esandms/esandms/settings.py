@@ -27,7 +27,48 @@ SECRET_KEY = 'django-insecure-t=k55e!^*ivfis2n=2_@vis!e%%*9q+4v0!p$x-)(*%3q+p*ib
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+
+SECURE_HSTS_SECONDS = 30  # Unit is seconds; *USE A SMALL VALUE FOR TESTING!* /2.592.000
+#SECURE_HSTS_SECONDS = 2_592_000
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', '.api.qrdestek.com']
+
+CSRF_TRUSTED_ORIGINS = [
+'https://api.qrdestek.com',
+'http://127.0.0.1',
+'http://localhost',
+'http://127.0.0.1:8000',
+]
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+'accept',
+'accept-encoding',
+'authorization',
+'content-type',
+'dnt',
+'origin',
+'user-agent',
+'x-csrftoken',
+'x-requested-with',
+]
 
 
 # Application definition
@@ -47,8 +88,21 @@ INSTALLED_APPS = [
     'classes',
     'schedulings',
     'django_extensions',
-    'corsheaders'
+    'corsheaders',
+    'drf_yasg',
 ]
+
+SWAGGER_SETTINGS = {
+    'DEFAULT_AUTO_SCHEMA': {
+        'SECURITY': [],
+    },
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+    'USE_SESSION_AUTH': False
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -114,6 +168,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': '1234',
         'PORT': '5432',
+        'HOST': '127.0.0.1',
     }
 }
 
