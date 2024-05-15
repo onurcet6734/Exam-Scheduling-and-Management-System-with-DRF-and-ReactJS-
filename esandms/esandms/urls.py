@@ -51,7 +51,6 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/hall/', include('halls.api.urls', namespace='halls')),
-    # path('api/user/', include('users.api.urls', namespace='users')),
     path('api/exam/', include('exams.api.urls', namespace='exams')),
     path('api/class/', include('classes.api.urls', namespace='classes')),
     path('api/scheduling/', include('schedulings.api.urls', namespace='schedulings')),

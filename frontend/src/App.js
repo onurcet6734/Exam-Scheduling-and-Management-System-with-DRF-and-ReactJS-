@@ -27,13 +27,33 @@ class Login extends React.Component {
     axios.post(`http://localhost:8000/api/token/`, user)
       .then(res => {
         this.setState({ token: res.data.access });  
-        this.getStudentSchedule(res.data.access);  
+        this.getStudentSchedule(res.data.access);
+        this.checkUserType(res.data.access);  
         
       })
       .catch(error => {
         console.error(error);
       });
   }
+
+  checkUserType = async (token) => {
+    try {
+        const response = await axios.get('http://localhost:8000/users/3/', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        const userIsAdmin = response.data.is_superuser;
+
+        if (userIsAdmin) {
+            console.log("Admin");
+        } else {
+            console.log("Normal user");
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+    }
+  };
 
   getStudentSchedule = (token) => {
     axios.get(`http://localhost:8000/api/scheduling/show-student-schedule/`, {
