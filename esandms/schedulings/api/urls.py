@@ -6,7 +6,7 @@ from .views import SchedulingListCreateView, SchedulingUpdateDeleteDetailView, S
 app_name = "schedulings"
 
 urlpatterns = [
-    path('list-create', SchedulingListCreateView.as_view()),
+    path('list-create/', SchedulingListCreateView.as_view()),
     path('update-delete/<int:pk>', SchedulingUpdateDeleteDetailView.as_view()),
     path('show-student-schedule/', ShowStudentSchedule.as_view())
 ]

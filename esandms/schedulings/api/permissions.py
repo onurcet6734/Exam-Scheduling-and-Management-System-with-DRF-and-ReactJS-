@@ -15,7 +15,7 @@ class IsSuperUserOrReadOnly(permissions.BasePermission):
         return False
 
     def has_object_permission(self, request, view, obj):
-        return request.method in permissions.SAFE_METHODS
+          return bool(request.user and request.user.is_authenticated)
     
 
 class IsOwner(permissions.BasePermission):
@@ -23,9 +23,11 @@ class IsOwner(permissions.BasePermission):
     message = "Sadece öğrenciler erişim sağlayabilir"
 
     def has_permission(self, request, view):
-        import ipdb;ipdb.set_trace()
+        # import ipdb;ipdb.set_trace()
         user = User.objects.filter(username=request.user)
         if request.user.is_authenticated and user.get().is_staff==False and user.get().is_superuser==False:
             return True
         return False
+    
+
     
