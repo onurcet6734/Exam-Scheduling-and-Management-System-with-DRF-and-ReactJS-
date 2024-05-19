@@ -1,123 +1,111 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
+function Login() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [token, setToken] = useState(null);
+  const [redirectToStudents, setRedirectToStudents] = useState(false);
+  const [schedule, setSchedule] = useState(null); // schedule state added here
+  const navigate = useNavigate();
 
-class Login extends React.Component {
-  state = {
-    username: '',
-    password: '',
-    token: null,  
+  const handleInputChange = (event) => {
+    if (event.target.name === 'username') {
+      setUsername(event.target.value);
+    } else if (event.target.name === 'password') {
+      setPassword(event.target.value);
+    }
   }
 
-  handleInputChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  }
-
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
   
     const user = {
-      username: this.state.username,
-      password: this.state.password
+      username: username,
+      password: password
     };
   
     axios.post(`https://api.qrdestek.com/api/token/`, user)
       .then(res => {
-        this.setState({ token: res.data.access });  
-        this.getStudentSchedule(res.data.access);
-        this.checkUserType(res.data.access);  
-        
+        setToken(res.data.access);
+        getStudentSchedule(res.data.access);
+        checkUserType(res.data.access);  
       })
       .catch(error => {
         console.error(error);
       });
   }
 
-  checkUserType = async (token) => {
+  const checkUserType = async (token) => {
     try {
-        const response = await axios.get('https://api.qrdestek.com/users/3/', {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-        });
-        const userIsAdmin = response.data.is_superuser;
-
-        if (userIsAdmin) {
-            console.log("Admin");
-        } else {
-            console.log("Normal user");
+      const response = await axios.get('https://api.qrdestek.com/users/5/', {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
+      });
+      const userIsAdmin = response.data.is_superuser;
+  
+      if (!userIsAdmin) {
+        navigate('/halls');
+      }
     } catch (error) {
-        console.error('Error fetching user info:', error);
+      console.error('Error fetching user info:', error);
     }
   };
 
-  getStudentSchedule = (token) => {
+  const getStudentSchedule = (token) => {
     axios.get(`https://api.qrdestek.com/users/`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
     .then(res => {
-      this.setState({ schedule: res.data }); 
+      setSchedule(res.data);
     })
     .catch(error => {
       console.error(error);
     });
   }
 
-  render() {
-    return (
-      <div className="container">
-        <h1>Login</h1>
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label>
-              Username:
-              <input
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleInputChange}
-                className="form-control"
-              />
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              Password:
-              <input
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleInputChange}
-                className="form-control"
-              />
-            </label>
-          </div>
-          <button type="submit" className="btn btn-primary">Log in</button>
-        </form>
-        {this.state.schedule && <pre>{JSON.stringify(this.state.schedule, null, 2)}</pre>} 
-      </div>
-    );
+  if (redirectToStudents) {
+    navigate('/students/index');
   }
+
+  return (
+    <div className="container">
+      <h1>Login</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>
+            Username:
+            <input
+              type="text"
+              name="username"
+              value={username}
+              onChange={handleInputChange}
+              className="form-control"
+            />
+          </label>
+        </div>
+        <div className="form-group">
+          <label>
+            Password:
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={handleInputChange}
+              className="form-control"
+            />
+          </label>
+        </div>
+        <button type="submit" className="btn btn-primary">Log in</button>
+      </form>
+      {schedule && <pre>{JSON.stringify(schedule, null, 2)}</pre>} 
+    </div>
+  );
 }
 
 export default Login;
-
-// import logo from './logo.svg';
-// import './App.css';
-
-// //custom components
-// import MainRouter from './MainRouter';
-
-// function App() {
-//   return (
-//     <MainRouter />
-//   );
-// }
-
-// export default App;
