@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token, TokenProxy
 from rest_framework import viewsets
+from django.contrib.auth.hashers import make_password
+
 
 
 
