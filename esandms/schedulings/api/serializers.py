@@ -24,6 +24,19 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = "__all__"
+    
+    def create(self, validated_data):
+        user = User(
+            email=validated_data['email'],
+            username=validated_data['username'],
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', ''),
+            is_staff=validated_data.get('is_staff', False),
+            is_active=validated_data.get('is_active', True),
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
 class SchedulingSerializer(serializers.ModelSerializer):
     classid = serializers.PrimaryKeyRelatedField(queryset=Classes.objects.all(), write_only=True)
