@@ -12,6 +12,7 @@ import Classes from "./pages/classes";
 import ClassesCreate from "./pages/classes/create";
 import Exams from "./pages/exams";
 import ExamsCreate from "./pages/exams/create";
+import ShowStudentSchedule from "./pages/show-schedule";
 
 const MainRouter = () => {
     return (
@@ -28,6 +29,7 @@ const MainRouter = () => {
                 <Route path="/exams" element={<Exams />} />
                 <Route path="/exams/create" element={<ExamsCreate />} />
                 <Route path="*" element={<Login />} />
+                <Route path="/show-schedule" element={<ShowStudentSchedule />} />
             </Routes>
         </Router>
     )

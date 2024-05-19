@@ -48,7 +48,7 @@ function Login() {
       const userIsAdmin = response.data.is_superuser;
   
       if (!userIsAdmin) {
-        navigate('/halls');
+        navigate('/show-schedule');
       }
     } catch (error) {
       console.error('Error fetching user info:', error);
