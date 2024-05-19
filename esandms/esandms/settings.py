@@ -163,12 +163,12 @@ WSGI_APPLICATION = 'esandms.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ESandMSdb',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'examproject',
+        'USER': 'examuserproject2',
+        'PASSWORD': 'DJRDK3/J33SALF3RFJ2sfs',
         'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
