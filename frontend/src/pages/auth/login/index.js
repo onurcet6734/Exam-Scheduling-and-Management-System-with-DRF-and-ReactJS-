@@ -29,18 +29,19 @@ function Login() {
   
     axios.post(`https://api.qrdestek.com/api/token/`, user)
       .then(res => {
+        localStorage.setItem('token', res.data.access);
         setToken(res.data.access);
         getStudentSchedule(res.data.access);
-        checkUserType(res.data.access);  
+        checkUserType(res.data.access, "berkakalin");  
       })
       .catch(error => {
         console.error(error);
       });
   }
 
-  const checkUserType = async (token) => {
+  const checkUserType = async (token,username) => {
     try {
-      const response = await axios.get('https://api.qrdestek.com/users/5/', {
+      const response = await axios.get(`https://api.qrdestek.com/users/?username=${username}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -50,6 +51,13 @@ function Login() {
       if (!userIsAdmin) {
         navigate('/show-schedule');
       }
+      else if (userIsAdmin){
+        navigate('/halls');
+      }
+      else {
+        console.error('User type not recognized');
+      }
+      
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
