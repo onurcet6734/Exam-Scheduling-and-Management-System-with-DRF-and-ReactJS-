@@ -65,6 +65,15 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = User.objects.all()
         username = self.request.query_params.get('username', None)
+        is_superuser = self.request.query_params.get('is_superuser', None)
+
         if username is not None:
             queryset = queryset.filter(username=username)
+
+        if is_superuser is not None:
+            if is_superuser.lower() == 'true':
+                queryset = queryset.filter(is_superuser=True)
+            elif is_superuser.lower() == 'false':
+                queryset = queryset.filter(is_superuser=False)
+
         return queryset
