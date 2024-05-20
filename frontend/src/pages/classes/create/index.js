@@ -1,9 +1,46 @@
-import React from "react";
-
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
+
+import axios from "axios";
+
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Header from "../../../components/header";
 
-const ClassesCreate = () => {
+const ClassesCreate = (props) => {
+    const [name, setName] = useState("");
+    const [year, setYear] = useState("");
+    const [semester, setSemester] = useState("");
+    const [students, setStudents] = useState("");
+    const [item, setItem] = useState({});
+
+
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        setItem(props.data);
+    }, [props.data])
+
+    const handleCreate = () => {
+        const data = {
+            name: name,
+            year: year,
+            semester: semester,
+            count_of_students: students
+        }
+        axios.post(`https://api.qrdestek.com/api/class/list-create/`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => {
+
+            NotificationManager.success('Success Message', 'This data is successfully created.');
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
     return (
         <>
             <div className="flex">
@@ -15,29 +52,40 @@ const ClassesCreate = () => {
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Name</p>
-                        <input className="w-full" placeholder="Please input the name..." />
+                        <input className="w-full" placeholder="Please input the name..." onChange={(e) => setName(e.target.value)} />
                     </div>
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Year</p>
-                        <input className="w-full" placeholder="Please input the name..." />
+                        <select className="w-full" onChange={(e) => setYear(e.target.value)}>
+                            <option value="">Select a year...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
                     </div>
 
                     <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Somestar</p>
-                        <input className="w-full" placeholder="Please input the name..." />
+                        <p className="text-md font-medium">Semester</p>
+                        <select className="w-full" onChange={(e) => setSemester(e.target.value)}>
+                            <option value="">Select a semester...</option>
+                            <option value="Sonbahar">Sonbahar</option>
+                            <option value="İlkbahar">İlkbahar</option>
+                        </select>
                     </div>
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Number Of Students</p>
-                        <input className="w-full" placeholder="Please input the number of seats..." />
+                        <input className="w-full" type="number" placeholder="Please input the number of seats..." onChange={(e) => setStudents(e.target.value)} />
                     </div>
 
-                    <button className="bg-blue-600 text-white py-2 px-4 rounded-lg">Save</button>
+                    <button className="bg-blue-600 text-white py-2 px-4 rounded-lg" onClick={() => handleCreate()}>Save</button>
 
                     <div className="pt-2">
-                        <Link to="/" className="text-blue-600">Back to List</Link>
+                        <Link to="/classes" onClick={() => window.location.href="/classes"} className="text-blue-600">Back to List</Link>
                     </div>
+                    <NotificationContainer/>
                 </div>
             </div>
         </>
