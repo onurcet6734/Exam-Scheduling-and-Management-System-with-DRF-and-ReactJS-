@@ -17,7 +17,8 @@ import "react-datepicker/dist/react-datepicker.css";
 const ScheduleCreate = () => {
     const [examDate, setExamDate] = useState(new Date());
     const [examTime, setExamTime] = useState('10:00');
-    const [examFinishDate, setExamFinishDate] = useState(new Date());
+    const [FinisDate, setFinishDate] = useState(new Date());
+    const [finishTime, setFinishTime] = useState('10:00');
     const [hall, setHall] = useState({});
     const [exam, setExam] = useState({});
     const [duration, setDuration] = useState("");
@@ -113,7 +114,7 @@ const ScheduleCreate = () => {
                 const data = {
                     school_number: schoolNumber,
                     exam_start_date: examDate.getFullYear() + "-" + (examDate.getMonth() + 1) + "-" + (examDate.getDay() + 1) + "T" + examTime + ":00", 
-                    exam_finish_date: examDate.getFullYear() + "-" + (examDate.getMonth() + 1) + "-" + (examDate.getDay() + 1) + "T" + examTime + ":00", // Ay ve gün için 1 eklendi
+                    exam_finish_date: FinisDate.getFullYear() + "-" + (FinisDate.getMonth() + 1) + "-" + (FinisDate.getDay() + 1) + "T" + finishTime + ":00", 
                     classid: item.id,
                     class_info: item,
                     hallid: hall.id,
@@ -166,10 +167,10 @@ const ScheduleCreate = () => {
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Exam Finish Date</p>
-                        <DatePicker selected={examFinishDate} onChange={(date) => setExamFinishDate(date)} />
-                        <TimePicker onChange={(time) => setExamTime(time)} value={examTime} />
+                        <DatePicker selected={FinisDate} onChange={(date) => setFinishDate(date)} dateFormat="MM/dd/yyyy" />
+                        <TimePicker onChange={(time) => setFinishTime(time)} value={finishTime} />
                     </div>
-
+                    
                     
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Hall</p>
