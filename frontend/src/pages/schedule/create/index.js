@@ -17,6 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const ScheduleCreate = () => {
     const [examDate, setExamDate] = useState(new Date());
     const [examTime, setExamTime] = useState('10:00');
+    const [examFinishDate, setExamFinishDate] = useState(new Date());
     const [hall, setHall] = useState({});
     const [exam, setExam] = useState({});
     const [duration, setDuration] = useState("");
