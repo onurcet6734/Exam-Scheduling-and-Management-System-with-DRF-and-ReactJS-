@@ -54,26 +54,30 @@ const StudentsEdit = (props) => {
         setItem(props.data);
     }, [props.data])
 
-    const handleUpdate = () => {
-        const data = {
-            password: "123456",
-            username: selectUser,
-            first_name: name,
-            last_name: surName,
-            email: selectClass + "@gmail.com",
-            is_superuser: false
-        }
-        axios.put(`https://api.qrdestek.com/users/${item.id}/`, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
+    const handleUpdate = async () => {
+
+        try {
+            const getUser = await axios.get(`https://api.qrdestek.com/users/${item.id}/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        
+            const data = {
+                username: username,
+                first_name: name,
+                last_name: surName,
             }
-        })
-        .then(res => {
+        
+            await axios.patch(`https://api.qrdestek.com/users/${item.id}/`, data, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             NotificationManager.success('Success Message', 'This data is successfully updated.');
-        })
-        .catch(error => {
+        } catch (error) {
             console.error(error);
-        });
+        }
     }
 
     return (
@@ -82,7 +86,7 @@ const StudentsEdit = (props) => {
                 <Header />
 
                 <div className="items-center w-full mx-32">
-                    <p className="my-4 px-2 text-2xl font-bold tracking-wider">Create</p>
+                    <p className="my-4 px-2 text-2xl font-bold tracking-wider">Edit</p>
                     <p className="text-lg py-2 font-medium tracking-wider border-b-4">Student</p>
 
 
