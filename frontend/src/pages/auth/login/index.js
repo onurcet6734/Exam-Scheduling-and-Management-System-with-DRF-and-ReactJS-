@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -8,8 +8,16 @@ function Login() {
   const [password, setPassword] = useState('');
   const [token, setToken] = useState(null);
   const [redirectToStudents, setRedirectToStudents] = useState(false);
-  const [schedule, setSchedule] = useState(null); // schedule state added here
+  const [schedule, setSchedule] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      navigate('/login');
+    }
+  }, []);
 
   const handleInputChange = (event) => {
     if (event.target.name === 'username') {
@@ -32,32 +40,33 @@ function Login() {
         localStorage.setItem('token', res.data.access);
         setToken(res.data.access);
         getStudentSchedule(res.data.access);
-        checkUserType(res.data.access, "berkakalin");  
+        checkUserType(res.data.access);  
       })
       .catch(error => {
         console.error(error);
       });
   }
 
-  const checkUserType = async (token,username) => {
+  const checkUserType = async (token) => {
     try {
       const response = await axios.get(`https://api.qrdestek.com/users/?username=${username}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      const userIsAdmin = response.data.is_superuser;
   
-      if (!userIsAdmin) {
-        navigate('/show-schedule');
+      // Check if response data exists
+      if (response.data) {
+        const userIsAdmin = response.data.is_superuser;
+  
+        if (userIsAdmin) {
+          navigate('/halls');
+        } else {
+          navigate('/show-schedule');
+        }
+      } else {
+        console.error('No data in response');
       }
-      else if (userIsAdmin){
-        navigate('/halls');
-      }
-      else {
-        console.error('User type not recognized');
-      }
-      
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
