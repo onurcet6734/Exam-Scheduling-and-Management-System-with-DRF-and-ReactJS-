@@ -26,11 +26,13 @@ const ScheduleCreate = () => {
     const [studentData, setStudentData] = useState([]);
     const [classData, setClassData] = useState([]);
     const [classItem, setClassItem] = useState({});
-    const [cookies, setCookie] = useCookies(['name']);
+    const [token, setToken] = useState(null);
+    const [schoolNumber, setSchoolNumber] = useState("");
 
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        setToken(token);
         const getHall = (token) => {
             axios.get(`https://api.qrdestek.com/api/hall/list-create/`, {
                 headers: {
@@ -102,16 +104,15 @@ const ScheduleCreate = () => {
     }, [])
 
     const handleCreate = () => {
-
-        classData.map((item, index) => {
+        classData.forEach((item, index) => { // map yerine forEach kullanıldı
             if (item.name == exam.class_info.name) {
                 setClassItem(item);
                 let d = 0;
-
+    
                 const data = {
-                    school_number: 2,
-                    exam_start_date: examDate.getFullYear() + "-" + examDate.getMonth() + "-" + examDate.getDay() + "T" + examTime + ":00",
-                    exam_finish_date: examDate.getFullYear() + "-" + examDate.getMonth() + "-" + examDate.getDay() + "T" + examTime + ":00",
+                    school_number: schoolNumber,
+                    exam_start_date: examDate.getFullYear() + "-" + (examDate.getMonth() + 1) + "-" + (examDate.getDay() + 1) + "T" + examTime + ":00", 
+                    exam_finish_date: examDate.getFullYear() + "-" + (examDate.getMonth() + 1) + "-" + (examDate.getDay() + 1) + "T" + examTime + ":00", // Ay ve gün için 1 eklendi
                     classid: item.id,
                     class_info: item,
                     hallid: hall.id,
@@ -128,9 +129,7 @@ const ScheduleCreate = () => {
                     }
                 })
                 .then(res => {
-                    // setSchedule(res.data);
-                    // console.log(res, state);
-                    // setHallData(res.data);
+
                     NotificationManager.success('Success Message', 'This data is successfully created.');
                 })
                 .catch(error => {
@@ -151,24 +150,26 @@ const ScheduleCreate = () => {
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">School Number</p>
-                        <input className="w-full" placeholder="Please input the school Number..." />
+                        <input 
+                            className="w-full" 
+                            placeholder="Please input the school Number..." 
+                            onChange={(e) => setSchoolNumber(e.target.value)}
+                        />
                     </div>
 
                     <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">ExamDate</p>
+                        <p className="text-md font-medium">Exam Start Date</p>
                         <DatePicker selected={examDate} onChange={(date) => setExamDate(date)} dateFormat="MM/dd/yyyy" />
-                    </div>
-
-                    <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">ExamTime</p>
                         <TimePicker onChange={(time) => setExamTime(time)} value={examTime} />
                     </div>
 
                     <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Duration</p>
-                        <input className="w-full" type="number" placeholder="Please input the duration..." onChange={(e) => setDuration(e.target.value)} />
+                        <p className="text-md font-medium">Exam Finish Date</p>
+                        <DatePicker onChange={(time) => setExamTime(time)} value={examTime} />
+                        <TimePicker onChange={(time) => setExamTime(time)} value={examTime} />
                     </div>
 
+                    
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Hall</p>
                         <select className="w-full" onChange={(e) => setHall(hallsData[e.target.value])}>
@@ -182,8 +183,8 @@ const ScheduleCreate = () => {
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Exam</p>
-                        <select className="w-full" onChange={(e) => setExam(examsData[e.target.value])}>
-                            {examsData.map((item, index) => {
+                        <select className="w-full" onChange={(e) => setClassItem(classData[e.target.value])}> 
+                            {classData.map((item, index) => { 
                                 return (
                                     <option value={index} key={item.id}>{item.name}</option>
                                 )
@@ -191,6 +192,7 @@ const ScheduleCreate = () => {
                         </select>
                     </div>
 
+                    
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Student</p>
                         <select className="w-full" onChange={(e) => setStudent(studentData[e.target.value])}>
