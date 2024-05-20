@@ -4,8 +4,6 @@ import Header from "../../../components/header";
 
 const ScheduleDetail = (props) => {
     const [item, setItem] = useState({});
-    const [examTime, setExamTime] = useState("");
-    const [examDate, setExamDate] = useState("");
 
     useEffect(() => {
         setItem(props.data);
