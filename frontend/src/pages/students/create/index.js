@@ -1,8 +1,85 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../../../components/header";
+import axios from "axios";
+
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 const StudentsCreate = () => {
+    const [studentData, setStudentData] = useState([]);
+    const [classData, setClassData] = useState([]);
+    const [name, setName] = useState("");
+    const [surName, setSurName] = useState("");
+    const [password, setPassword] = useState("");
+    const [selectClass, setSelectClass] = useState("");
+    const [selectUser, setSelectUser] = useState("");
+
+    const token = localStorage.getItem('token');
+
+    const getStudentData = (token) => {
+        axios.get(`https://api.qrdestek.com/users/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            setStudentData(res.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    const getClassData = (token) => {
+        axios.get(`https://api.qrdestek.com/api/class/list-create/`, {
+            headers: {
+            Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            setClassData(res.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    useEffect(() => {
+        getClassData(token);
+        getStudentData(token);
+    }, [])
+
+    const handleCreate = () => {
+
+
+
+        const data = {
+            password: `${name}${surName}123`,
+            username: selectUser,
+            first_name: name,
+            last_name: surName,
+            email: `${name}.${surName}@aydin.edu.tr`,
+            is_staff: true,
+            is_active: true,
+            date_joined: new Date().toISOString(),
+            is_superuser: false,
+            groups: [],
+            user_permissions: []
+        }
+        
+        axios.post(`https://api.qrdestek.com/users/`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            NotificationManager.success('Success Message', 'This data is successfully created.');
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
     return (
         <>
             <div className="flex">
@@ -14,39 +91,28 @@ const StudentsCreate = () => {
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Name</p>
-                        <input className="w-full" placeholder="Please input the name..." />
+                        <input className="w-full" placeholder="Please input the name..." onChange={(e) => setName(e.target.value)} />
                     </div>
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Surname</p>
-                        <input className="w-full" placeholder="Please input the name..." />
+                        <input className="w-full" placeholder="Please input the name..." onChange={(e) => setSurName(e.target.value)} />
                     </div>
 
                     <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">SchoolNumber</p>
-                        <input className="w-full" placeholder="Please input the name..." />
+                        <p className="text-md font-medium">Username</p>
+                        <input className="w-full" placeholder="Please input the username..." onChange={(e) => setSelectUser(e.target.value)} />
                     </div>
 
-                    <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Number Of Students</p>
-                        <input className="w-full" placeholder="Please input the number of seats..." />
-                    </div>
+                  
 
-                    <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Class</p>
-                        <input className="w-full" placeholder="Please input the number of seats..." />
-                    </div>
-
-                    <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Login</p>
-                        <input className="w-full" placeholder="Please input the number of seats..." />
-                    </div>
-
-                    <button className="bg-blue-600 text-white py-2 px-4 rounded-lg">Save</button>
+                    <button className="bg-blue-600 text-white py-2 px-4 rounded-lg" onClick={() => handleCreate()}>Save</button>
 
                     <div className="pt-2">
-                        <Link to="/" className="text-blue-600">Back to List</Link>
+                        <Link to="/students" onClick={() => window.location.href="/students"} className="text-blue-600">Back to List</Link>
                     </div>
+
+                    <NotificationContainer />
                 </div>
             </div>
         </>
