@@ -165,7 +165,7 @@ const ScheduleCreate = () => {
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Exam Finish Date</p>
-                        <DatePicker onChange={(time) => setExamTime(time)} value={examTime} />
+                        <DatePicker selected={examFinishDate} onChange={(date) => setExamFinishDate(date)} />
                         <TimePicker onChange={(time) => setExamTime(time)} value={examTime} />
                     </div>
 
