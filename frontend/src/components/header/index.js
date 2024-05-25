@@ -50,7 +50,14 @@ const Header = () => {
                         </div>
                     </Link>
 
-                    <div className="pl-4 flex py-4 bg-sky-900 hover:bg-sky-950">
+                    <div 
+                        className="pl-4 flex py-4 bg-sky-900 hover:bg-sky-950"
+                        onClick={() => {
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('userIsAdmin');
+                            window.location.href = "/login"; // optional: user to be redirected to the login page
+                        }}
+                    >
                         <FontAwesomeIcon icon={faLock} className="pt-1" />
                         <p className="text-md font-medium tracking-wider px-4">Log out</p>
                     </div>

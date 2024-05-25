@@ -57,11 +57,14 @@ function Login() {
   
       // Check if response data exists
       if (response.data) {
-        const userIsAdmin = response.data.is_superuser;
+        const userIsAdmin = response.data[0].is_superuser;
+        localStorage.setItem('userIsAdmin', userIsAdmin);
   
         if (userIsAdmin) {
+          console.log('User is admin');
           navigate('/halls');
         } else {
+          console.log('User is not admin');
           navigate('/show-schedule');
         }
       } else {

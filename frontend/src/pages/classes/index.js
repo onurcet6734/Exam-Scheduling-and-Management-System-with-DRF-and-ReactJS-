@@ -17,9 +17,23 @@ const Classes = () => {
     const [classData, setClassData] = useState([]);
     const [state, setState] = useState(0);
     const [selectItem, setSelectItem] = useState({});
+    const [isLoading, setIsLoading] = useState(true); // new loading state
+    const [redirect, setRedirect] = useState(false); // new redirect state
 
 
     useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        const userIsAdmin = localStorage.getItem('userIsAdmin');
+
+        if (storedToken && userIsAdmin=="true") {
+            setToken(storedToken);
+            // getHallData function here
+        } else {
+            setIsLoading(false); // set loading to false after token check
+            setRedirect(true); // set redirect to true if there's no token
+        }
+        setIsLoading(false); // set loading to false after token check
+
         const getClassData = (token) => {
             axios.get(`https://api.qrdestek.com/api/class/list-create/`, {
                 headers: {
@@ -27,6 +41,7 @@ const Classes = () => {
                 }
             })
             .then(res => {
+                console.log(token);
                 console.log(res);
                 setState(0);
                 setClassData(res.data);
@@ -36,16 +51,17 @@ const Classes = () => {
             });
         }
     
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href="/";
-        }
-        else {
-            setToken(token)
-        }
-    
-        getClassData(token);
+        getClassData(storedToken);
     }, [])
+    
+    if (redirect) {
+        window.location.href = "/login";
+        return null; // return null to prevent rendering
+    }
+
+    if (isLoading) {
+        return null; // or return a loading spinner
+    } 
 
     const handleEdit = (item) => {
         setState(1);

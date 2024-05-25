@@ -18,12 +18,21 @@ const Halls = () => {
     const [hallData, setHallData] = useState([]);
     const [state, setState] = useState(0);
     const [selectItem, setSelectItem] = useState({});
+    const [isLoading, setIsLoading] = useState(true); // new loading state
+    const [redirect, setRedirect] = useState(false); // new redirect state
+
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
-        if (storedToken) {
+        const userIsAdmin = localStorage.getItem('userIsAdmin');
+        if (storedToken && userIsAdmin=="true") {
             setToken(storedToken);
+        } else {
+            setIsLoading(false); // set loading to false after token check
+            setRedirect(true); // set redirect to true if there's no token
         }
+        setIsLoading(false); // set loading to false after token check
+
         const getHallData = async () => {
             const getHall = (token) => {
                 axios.get(`https://api.qrdestek.com/api/hall/list-create/`, {
@@ -45,6 +54,15 @@ const Halls = () => {
         }
         getHallData();
     }, []);
+
+    if (redirect) {
+        window.location.href = "/login";
+        return null; // return null to prevent rendering
+    }
+
+    if (isLoading) {
+        return null; // or return a loading spinner
+    } 
 
     const handleEdit = (item) => {
         setState(1);

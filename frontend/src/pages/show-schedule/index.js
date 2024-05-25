@@ -7,13 +7,17 @@ import Header from "../../components/header";
 
 const ShowStudentSchedule = () => {
     const [schedule, setSchedule] = useState([]);
+    const [isLoading, setIsLoading] = useState(true); // new loading state
+    const [redirect, setRedirect] = useState(false); // new redirect state
+    const [token, setToken] = useState(null);
+
 
     const fetchSchedule = async () => {
-        const token = localStorage.getItem('token');
+        const storedToken = localStorage.getItem('token');
         try {
             const response = await axios.get('https://api.qrdestek.com/api/scheduling/show-student-schedule/', {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${storedToken}`
                 }
             });
             setSchedule(response.data);
@@ -23,8 +27,31 @@ const ShowStudentSchedule = () => {
     };
 
     useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        const userIsAdmin = localStorage.getItem('userIsAdmin');
+
+        if (storedToken && userIsAdmin=="false") {
+            setToken(storedToken);
+            // getHallData function here
+        } else {
+            setIsLoading(false); // set loading to false after token check
+            setRedirect(true); // set redirect to true if there's no token
+        }
+        setIsLoading(false);
+
+
         fetchSchedule();
     }, []);
+
+    
+    if (redirect) {
+        window.location.href = "/login";
+        return null; // return null to prevent rendering
+    }
+
+    if (isLoading) {
+        return null; // or return a loading spinner
+    } 
 
     const formatDate = (dateString) => {
         const dateObj = new Date(dateString);
@@ -36,6 +63,18 @@ const ShowStudentSchedule = () => {
 
     return (
         <>
+            <div className="d-flex justify-content-end p-3">
+                <button 
+                    onClick={() => {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('userIsAdmin');
+                        window.location.href = "/login"; // optional: user to be redirected to the login page
+                    }}
+                    className="btn btn-danger"
+                >
+                    Logout
+                </button>
+            </div>
             <div className="container mt-5">
                 <h1 className="text-center mb-4">Sınav Çizelgesi</h1>
                 <table className="table table-striped table-hover">

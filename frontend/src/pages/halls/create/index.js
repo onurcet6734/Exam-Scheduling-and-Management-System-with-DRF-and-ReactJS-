@@ -7,14 +7,37 @@ import Header from "../../../components/header";
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 const HallsCreate = (props) => {
-
+    const [token, setToken] = useState(null);
     const [name, setName] = useState("");
     const [seats, setSeats] = useState("");
     const [item, setItem] = useState({});
+    const [isLoading, setIsLoading] = useState(true); // new loading state
+    const [redirect, setRedirect] = useState(false); // new redirect state
 
     useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        const userIsAdmin = localStorage.getItem('userIsAdmin');
+
+        if (storedToken && userIsAdmin=="true") {
+            setToken(storedToken);
+            // getHallData function here
+        } else {
+            setIsLoading(false); // set loading to false after token check
+            setRedirect(true); // set redirect to true if there's no token
+        }
+        setIsLoading(false); // set loading to false after token check
+
         setItem(props.data);
     }, [props.data])
+
+    if (redirect) {
+        window.location.href = "/login";
+        return null; // return null to prevent rendering
+    }
+
+    if (isLoading) {
+        return null; // or return a loading spinner
+    } 
 
     const handleCreate = () => {
         const token = localStorage.getItem('token');

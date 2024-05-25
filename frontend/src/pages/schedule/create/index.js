@@ -28,13 +28,26 @@ const ScheduleCreate = () => {
     const [studentData, setStudentData] = useState([]);
     const [classData, setClassData] = useState([]);
     const [classItem, setClassItem] = useState({});
-    const [token, setToken] = useState(null);
     const [schoolNumber, setSchoolNumber] = useState("");
+    const [token, setToken] = useState(null);
+    const [isLoading, setIsLoading] = useState(true); // new loading state
+    const [redirect, setRedirect] = useState(false); // new redirect state
 
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        setToken(token);
+
+        const storedToken = localStorage.getItem('token');
+        const userIsAdmin = localStorage.getItem('userIsAdmin');
+
+        if (storedToken && userIsAdmin=="true") {
+            setToken(storedToken);
+            // getHallData function here
+        } else {
+            setIsLoading(false); // set loading to false after token check
+            setRedirect(true); // set redirect to true if there's no token
+        }
+        setIsLoading(false); // set loading to false after token check
+
         const getHall = (token) => {
             axios.get(`https://api.qrdestek.com/api/hall/list-create/`, {
                 headers: {
@@ -99,11 +112,20 @@ const ScheduleCreate = () => {
         }
 
 
-        getHall(token);
-        getExamData(token);
-        getStudentSchedule(token);
-        getClassData(token);
+        getHall(storedToken);
+        getExamData(storedToken);
+        getStudentSchedule(storedToken);
+        getClassData(storedToken);
     }, [])
+
+    if (redirect) {
+        window.location.href = "/login";
+        return null; // return null to prevent rendering
+    }
+
+    if (isLoading) {
+        return null; // or return a loading spinner
+    } 
 
     const handleCreate = () => {
         classData.forEach((item, index) => { // map yerine forEach kullanıldı

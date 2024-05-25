@@ -12,13 +12,35 @@ const ClassesCreate = (props) => {
     const [semester, setSemester] = useState("");
     const [students, setStudents] = useState("");
     const [item, setItem] = useState({});
+    const [token, setToken] = useState(null);
+    const [isLoading, setIsLoading] = useState(true); // new loading state
+    const [redirect, setRedirect] = useState(false); // new redirect state
 
 
-    const token = localStorage.getItem('token');
 
     useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        const userIsAdmin = localStorage.getItem('userIsAdmin');
+
+        if (storedToken && userIsAdmin=="true") {
+            setToken(storedToken);
+            // getHallData function here
+        } else {
+            setIsLoading(false); // set loading to false after token check
+            setRedirect(true); // set redirect to true if there's no token
+        }
+        setIsLoading(false);
         setItem(props.data);
     }, [props.data])
+
+    if (redirect) {
+        window.location.href = "/login";
+        return null; // return null to prevent rendering
+    }
+
+    if (isLoading) {
+        return null; // or return a loading spinner
+    } 
 
     const handleCreate = () => {
         const data = {

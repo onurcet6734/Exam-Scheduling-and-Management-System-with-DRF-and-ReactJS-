@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus, faSearch, faReply, faEdit, faRecycle, faI } from '@fortawesome/free-solid-svg-icons';
-import { Link } from "react-router-dom";
+import { Link , Navigate } from "react-router-dom";
 import axios from "axios";
 
 //custom component
@@ -19,10 +19,21 @@ const Students = () => {
     const [classData, setClassData] = useState([]);
     const [state, setState] = useState(0);
     const [selectItem, setSelectItem] = useState({});
+    const [isLoading, setIsLoading] = useState(true); // new loading state
+    const [redirect, setRedirect] = useState(false); // new redirect state
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
-        setToken(storedToken);
+        const userIsAdmin = localStorage.getItem('userIsAdmin');
+
+        if (storedToken && userIsAdmin=="true") {
+            setToken(storedToken);
+            // getHallData function here
+        } else {
+            setIsLoading(false); // set loading to false after token check
+            setRedirect(true); // set redirect to true if there's no token
+        }
+        setIsLoading(false); // set loading to false after token check
     
         const getStudentData = (token) => {
             axios.get(`https://api.qrdestek.com/users/`, {
@@ -55,17 +66,20 @@ const Students = () => {
             });
         }
     
-        if (!storedToken) {
-            window.location.href="/";
-        }
-        else {
-            // console.log(cookies.token);
-            setToken(storedToken) // Corrected here
-        }
     
         getStudentData(storedToken);
         getClassData(storedToken);
     }, [])
+
+    
+    if (redirect) {
+        window.location.href = "/login";
+        return null; // return null to prevent rendering
+    }
+
+    if (isLoading) {
+        return null; // or return a loading spinner
+    }  
 
     const handleEdit = (item) => {
         setState(1);
