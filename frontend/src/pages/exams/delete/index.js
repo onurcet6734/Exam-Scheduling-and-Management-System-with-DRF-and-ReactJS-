@@ -17,7 +17,7 @@ const ClassesDelete = (props) => {
     }, [props.data])
 
     const handleDelete = () => {
-        axios.delete(`https://api.qrdestek.com/api/class/update-delete/${item.id}`, {
+        axios.delete(`https://api.qrdestek.com/api/exam/update-delete/${item.id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -39,33 +39,17 @@ const ClassesDelete = (props) => {
                 <div className="items-center w-full mx-32">
                     <p className="my-4 px-2 text-2xl font-bold tracking-wider">Delete</p>
                     <p className="text-lg py-2 font-medium tracking-wider border-b-4">Are you sure you want to delete this?</p>
-                    <p className="text-lg py-2 font-medium tracking-wider border-b-4">Class</p>
+                    <p className="text-lg py-2 font-medium tracking-wider border-b-4">Exam</p>
 
-                    <div className="w-1/3 my-4 flex">
+                    <div className="w-1/2 my-4 flex">
                         <p className="text-md font-medium w-full">Name</p>
-                        <p className="text-md font-base">{item?.name}</p>
+                        <p className="text-md font-base w-full">{item?.name}</p>
                     </div>
 
-                    <div className="w-1/3 my-4 flex">
-                        <p className="text-md font-medium w-full">Semester</p>
-                        <p className="text-md font-base">{item?.semester}</p>
+                    <div className="w-1/2 my-4 flex">
+                        <p className="text-md font-medium w-full">Class</p>
+                        <p className="text-md font-base w-full">{item?.class_info?.name}</p>
                     </div>
-
-                    <div className="w-1/3 my-4 flex">
-                        <p className="text-md font-medium w-full">SchoolNumber</p>
-                        {/* <input className="w-full" placeholder="Please input the name..." /> */}
-                    </div>
-
-                    <div className="w-1/3 my-4 flex">
-                        <p className="text-md font-medium w-full">Number Of Students</p>
-                        <p className="text-md font-base">{item?.count_of_students}</p>
-                        {/* <input className="w-full" placeholder="Please input the number of seats..." /> */}
-                    </div>
-
-                    {/* <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Class</p>
-                        <input className="w-full" placeholder="Please input the number of seats..." />
-                    </div> */}
 
 
                     <button className="bg-blue-600 text-white py-2 px-4 rounded-lg" onClick={() => handleDelete()}>Delete</button>

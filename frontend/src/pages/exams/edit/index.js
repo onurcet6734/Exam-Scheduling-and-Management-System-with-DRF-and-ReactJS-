@@ -12,21 +12,48 @@ const ClassEdit = (props) => {
     const [semester, setSemester] = useState("");
     const [students, setStudents] = useState("");
     const [item, setItem] = useState({});
+    const [classData, setClassData] = useState([]);
+    const [classItem, setClassItem] = useState({});
+    const [token, setToken] = useState(null);
 
-    const token = localStorage.getItem('token');
 
     useEffect(() => {
         setItem(props.data);
     }, [props.data])
 
+    
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setToken(token);
+
+
+        const getClassData = (token) => {
+            axios.get(`https://api.qrdestek.com/api/class/list-create/`, {
+                headers: {
+                Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                // setSchedule(res.data);
+                setClassData(res.data);
+                setClassItem(res.data[0]);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+
+
+
+        getClassData(token);
+    }, [])
+
     const handleEdit = () => {
         const data = {
             name: name,
-            year: year,
-            semester: semester,
-            count_of_students: students
+            classid: classItem.id
         }
-        axios.put(`https://api.qrdestek.com/api/class/update-delete/${item.id}/`, data, {
+        axios.put(`https://api.qrdestek.com/api/exam/update-delete/${item.id}/`, data, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -45,37 +72,24 @@ const ClassEdit = (props) => {
                 <Header />
 
                 <div className="items-center w-full mx-32">
-                    <p className="my-4 px-2 text-2xl font-bold tracking-wider">Create</p>
-                    <p className="text-lg py-2 font-medium tracking-wider border-b-4">Class</p>
+                    <p className="my-4 px-2 text-2xl font-bold tracking-wider">Edit</p>
+                    <p className="text-lg py-2 font-medium tracking-wider border-b-4">Exam</p>
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Name</p>
                         <input className="w-full" placeholder="Please input the name..." onChange={(e) => setName(e.target.value)} />
                     </div>
 
+                    
                     <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Year</p>
-                        <select className="w-full" onChange={(e) => setYear(e.target.value)}>
-                            <option value="">Select a year...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
+                        <p className="text-md font-medium">Class</p>
+                        <select className="w-full" onChange={(e) => setClassItem(classData[e.target.value])}>
+                            {classData.map((item, index) => {
+                                return (
+                                    <option value={index} key={item.id}>{item.name}</option>
+                                )
+                            })}
                         </select>
-                    </div>
-
-                    <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Semester</p>
-                        <select className="w-full" onChange={(e) => setSemester(e.target.value)}>
-                            <option value="">Select a semester...</option>
-                            <option value="Sonbahar">Sonbahar</option>
-                            <option value="İlkbahar">İlkbahar</option>
-                        </select>
-                    </div>
-
-                    <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Number Of Students</p>
-                        <input className="w-full" type="number" placeholder="Please input the number of seats..." onChange={(e) => setStudents(e.target.value)} />
                     </div>
 
                     <button className="bg-blue-600 text-white py-2 px-4 rounded-lg" onClick={() => handleEdit()}>Save</button>
