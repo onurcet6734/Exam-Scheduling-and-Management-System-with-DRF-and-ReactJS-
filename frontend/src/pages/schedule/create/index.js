@@ -159,6 +159,12 @@ const ScheduleCreate = () => {
                 })
                 .catch(error => {
                     console.error(error);
+                    if (error.response.status == 400) {
+                        NotificationManager.error('Error Message', 'Ders cakismasi');
+                    }
+                    else if (error.response.status == 404) {
+                        NotificationManager.error('Error Message', 'Ters giden bir seyler var');
+                    }
                 });
             }
         })
@@ -207,7 +213,7 @@ const ScheduleCreate = () => {
                     </div>
 
                     <div className="w-1/3 my-4">
-                        <p className="text-md font-medium">Exam</p>
+                        <p className="text-md font-medium">Class</p>
                         <select className="w-full" onChange={(e) => setClassItem(classData[e.target.value])}> 
                             {classData.map((item, index) => { 
                                 return (
@@ -228,7 +234,7 @@ const ScheduleCreate = () => {
                             })}
                         </select>
                     </div>
-
+                    
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Exam</p>
                         <select className="w-full" onChange={(e) => setExam(classData[e.target.value])}>

@@ -20,6 +20,9 @@ const Halls = () => {
     const [selectItem, setSelectItem] = useState({});
     const [isLoading, setIsLoading] = useState(true); // new loading state
     const [redirect, setRedirect] = useState(false); // new redirect state
+    const [searchTerm, setSearchTerm] = useState("");
+    const [clearButtonClicked, setClearButtonClicked] = useState(false);
+
 
 
     useEffect(() => {
@@ -32,6 +35,8 @@ const Halls = () => {
             setRedirect(true); // set redirect to true if there's no token
         }
         setIsLoading(false); // set loading to false after token check
+
+        
 
         const getHallData = async () => {
             const getHall = (token) => {
@@ -53,7 +58,7 @@ const Halls = () => {
             getHall(storedToken);
         }
         getHallData();
-    }, []);
+    }, [clearButtonClicked]);
 
     if (redirect) {
         window.location.href = "/login";
@@ -98,15 +103,20 @@ const Halls = () => {
 
                         <div className="pt-6">
                             <div className="py-4 px-6 flex">
-                                <input placeholder="Search Name..."/>
+                                <input placeholder="Search Name..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
 
-                                <button type="primary" className="bg-sky-500 px-3 h-10 rounded-lg text-white">
+
+                                <button type="primary" className="bg-sky-500 px-3 h-10 rounded-lg text-white" onClick={() => setHallData(hallData.filter(item => item.name.includes(searchTerm)))}>
                                     <div className="flex">
                                         Search <FontAwesomeIcon icon={faSearch} className="pt-1 px-2" />
                                     </div>
                                 </button>
 
-                                <button type="primary" className="bg-slate-400 px-3 h-10 rounded-lg text-white mx-8">
+                                <button 
+                                    type="primary" 
+                                    className="bg-slate-400 px-3 h-10 rounded-lg text-white mx-8"
+                                    onClick={() => setClearButtonClicked(!clearButtonClicked)} // clearButtonClicked durumunu güncelle
+                                >
                                     <div className="flex">
                                         Clear <FontAwesomeIcon icon={faReply} className="pt-1 px-2" />
                                     </div>

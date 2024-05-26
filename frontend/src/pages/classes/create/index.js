@@ -21,6 +21,7 @@ const ClassesCreate = (props) => {
 
 
 
+
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         const userIsAdmin = localStorage.getItem('userIsAdmin');

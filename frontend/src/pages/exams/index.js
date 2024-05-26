@@ -14,11 +14,13 @@ import ClassesDetail from "./detail";
 
 const Classes = () => {
     const [token, setToken] = useState("");
-    const [classData, setClassData] = useState([]);
+    const [examData, setExamData] = useState([]);
     const [state, setState] = useState(0);
     const [selectItem, setSelectItem] = useState({});
     const [isLoading, setIsLoading] = useState(true); // new loading state
     const [redirect, setRedirect] = useState(false); // new redirect state
+    const [searchTerm, setSearchTerm] = useState("");
+    const [clearButtonClicked, setClearButtonClicked] = useState(false);
 
 
     useEffect(() => {
@@ -36,7 +38,7 @@ const Classes = () => {
         setIsLoading(false); // set loading to false after token check
 
 
-        const getClassData = (token) => {
+        const getExamData = (token) => {
             axios.get(`https://api.qrdestek.com/api/exam/list-create/`, {
                 headers: {
                 Authorization: `Bearer ${token}`
@@ -45,7 +47,7 @@ const Classes = () => {
             .then(res => {
                 console.log(res);
                 setState(0);
-                setClassData(res.data);
+                setExamData(res.data);
             })
             .catch(error => {
                 console.error(error);
@@ -53,8 +55,8 @@ const Classes = () => {
         }
     
         
-        getClassData(storedToken);
-    }, [])
+        getExamData(storedToken);
+    }, [clearButtonClicked])
     
     if (redirect) {
         window.location.href = "/login";
@@ -98,15 +100,19 @@ const Classes = () => {
 
                         <div className="pt-6">
                             <div className="py-4 px-6 flex">
-                                <input placeholder="Search Name..."/>
+                                <input placeholder="Search Name..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
 
-                                <button type="primary" className="bg-sky-500 px-3 h-10 rounded-lg text-white">
+                                <button type="primary" className="bg-sky-500 px-3 h-10 rounded-lg text-white" onClick={() => setExamData(examData.filter(item => item.name.includes(searchTerm)))}>
                                     <div className="flex">
                                         Search <FontAwesomeIcon icon={faSearch} className="pt-1 px-2" />
                                     </div>
                                 </button>
 
-                                <button type="primary" className="bg-slate-400 px-3 h-10 rounded-lg text-white mx-8">
+                                <button 
+                                    type="primary" 
+                                    className="bg-slate-400 px-3 h-10 rounded-lg text-white mx-8"
+                                    onClick={() => setClearButtonClicked(!clearButtonClicked)} // clearButtonClicked durumunu güncelle
+                                >
                                     <div className="flex">
                                         Clear <FontAwesomeIcon icon={faReply} className="pt-1 px-2" />
                                     </div>
@@ -124,7 +130,7 @@ const Classes = () => {
                                     </thead>
 
                                     <tbody>
-                                        {classData.map((item, index) => {
+                                        {examData.map((item, index) => {
                                             return (
                                                 <tr className="w-screen border-b-2" key={index}>
                                                     <td className="py-2">{item.name}</td>

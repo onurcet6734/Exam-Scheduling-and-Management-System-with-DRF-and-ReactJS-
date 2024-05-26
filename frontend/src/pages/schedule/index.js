@@ -21,6 +21,8 @@ const Schedule = () => {
     const [duration, setDuration] = useState("");
     const [isLoading, setIsLoading] = useState(true); // new loading state
     const [redirect, setRedirect] = useState(false); // new redirect state
+    const [searchTerm, setSearchTerm] = useState("");
+    const [clearButtonClicked, setClearButtonClicked] = useState(false);
 
 
     useEffect(() => {
@@ -56,7 +58,7 @@ const Schedule = () => {
 
 
         getExamData(storedToken);
-    }, [])
+    }, [clearButtonClicked])
 
     if (redirect) {
         window.location.href = "/login";
@@ -101,15 +103,19 @@ const Schedule = () => {
 
                         <div className="pt-6">
                             <div className="py-4 px-6 flex">
-                                <input placeholder="Search Name..."/>
+                                <input placeholder="Search School Number..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
 
-                                <button type="primary" className="bg-sky-500 px-3 h-10 rounded-lg text-white">
+                                <button type="primary" className="bg-sky-500 px-3 h-10 rounded-lg text-white" onClick={() => setScheduleData(scheduleData.filter(item => item.school_number.includes(searchTerm)))}>
                                     <div className="flex">
                                         Search <FontAwesomeIcon icon={faSearch} className="pt-1 px-2" />
                                     </div>
                                 </button>
 
-                                <button type="primary" className="bg-slate-400 px-3 h-10 rounded-lg text-white mx-8">
+                                <button 
+                                    type="primary" 
+                                    className="bg-slate-400 px-3 h-10 rounded-lg text-white mx-8"
+                                    onClick={() => setClearButtonClicked(!clearButtonClicked)} // clearButtonClicked durumunu güncelle
+                                >
                                     <div className="flex">
                                         Clear <FontAwesomeIcon icon={faReply} className="pt-1 px-2" />
                                     </div>

@@ -132,7 +132,6 @@ const ScheduleEdit = (props) => {
 
             }
 
-
             axios.put(`https://api.qrdestek.com/api/scheduling/update-delete/${item.id}/`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -145,6 +144,12 @@ const ScheduleEdit = (props) => {
             })
             .catch(error => {
                 console.error(error);
+                if (error.response.status == 400) {
+                    NotificationManager.error('Error Message', 'Ders cakismasi');
+                }
+                else if (error.response.status == 404) {
+                    NotificationManager.error('Error Message', 'Ters giden bir seyler var');
+                }
             });
             
         })
