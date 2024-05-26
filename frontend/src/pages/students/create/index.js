@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../../../components/header";
 import axios from "axios";
+import 'react-notifications/lib/notifications.css';
 
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
@@ -10,8 +11,6 @@ const StudentsCreate = () => {
     const [classData, setClassData] = useState([]);
     const [name, setName] = useState("");
     const [surName, setSurName] = useState("");
-    const [password, setPassword] = useState("");
-    const [selectClass, setSelectClass] = useState("");
     const [selectUser, setSelectUser] = useState("");
     const [token, setToken] = useState(null);
     const [isLoading, setIsLoading] = useState(true); // new loading state

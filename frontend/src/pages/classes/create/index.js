@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
+import 'react-notifications/lib/notifications.css';
+
 
 import axios from "axios";
+
 
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Header from "../../../components/header";

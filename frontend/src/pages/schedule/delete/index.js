@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Header from "../../../components/header";
 import axios from "axios";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 
 const ScheduleDetail = (props) => {

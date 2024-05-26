@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Header from "../../../components/header";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import axios from "axios";
+import 'react-notifications/lib/notifications.css';
 
 const StudentsDelete = (props) => {
 

@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import 'react-notifications/lib/notifications.css';
+
 
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
