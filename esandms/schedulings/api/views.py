@@ -30,7 +30,7 @@ class SchedulingListCreateView(generics.ListCreateAPIView):
             serializer.save(user=serializer.validated_data.get('user', None))
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 
 class SchedulingUpdateDeleteDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -47,7 +47,7 @@ class SchedulingUpdateDeleteDetailView(generics.RetrieveUpdateDestroyAPIView):
                 return Response({"hata": "Öğrencinin dersleri çakışıyor."}, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_404_BAD_REQUEST)
 
 
 class ShowStudentSchedule(generics.ListAPIView):
