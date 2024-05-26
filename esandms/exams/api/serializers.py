@@ -19,11 +19,9 @@ class ExamsSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
     
     def update(self, instance, validated_data):
-        classid_data = validated_data.pop('classid')
-        classid = instance.classid
-
-        classid.name = classid_data.get('name', classid.name)
-        classid.save()
+        if 'classid' in validated_data:
+            classid_data = validated_data.pop('classid')
+            instance.classid = classid_data
 
         instance.name = validated_data.get('name', instance.name)
         instance.save()
