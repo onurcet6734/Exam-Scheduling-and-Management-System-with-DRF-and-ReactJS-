@@ -43,7 +43,7 @@ class SchedulingUpdateDeleteDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         if serializer.is_valid():
-            if not self.service.check_schedules(serializer):
+            if not self.service.check_schedules(serializer) and Scheduling.objects.filter(user=serializer.validated_data.get('user', None)).count() > 1:
                 return Response({"hata": "Öğrencinin dersleri çakışıyor."}, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             return Response(serializer.data)

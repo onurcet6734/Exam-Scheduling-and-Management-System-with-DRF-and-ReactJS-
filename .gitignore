@@ -10,8 +10,9 @@ dist/
 media/
 .venv/
 
+esandms/esandms/settings.py
+
 # Environment Variables
-menu_mingle/.env
 
 /venv
 
