@@ -78,6 +78,7 @@ const ScheduleDetail = (props) => {
                     </div>
                 </div>
             </div>
+            <NotificationContainer />
         </>
     )
 }
