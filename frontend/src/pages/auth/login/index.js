@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -44,6 +47,9 @@ function Login() {
       })
       .catch(error => {
         console.error(error);
+        setUsername('');
+        setPassword('');
+        NotificationManager.error('Error: Invalid username or password');
       });
   }
 
@@ -94,37 +100,30 @@ function Login() {
   }
 
   return (
-    <div className="container">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>
-            Username:
-            <input
-              type="text"
-              name="username"
-              value={username}
-              onChange={handleInputChange}
-              className="form-control"
-            />
-          </label>
+    <>
+        <div className="grid justify-items-center ...">
+            <div className="shadow-2xl mt-12 border-indigo-600 rounded-lg w-[25%]">
+                <div className="m-4">
+                    <p className="text-xl text-center py-4 font-medium">Login Page</p>
+                    <div className="px-4 my-2">
+                        <p className="text-md">Username:</p>
+                        <input className="w-full border-2 border-gray-300 p-2 my-2 rounded-md" type="text" name="username" value={username} onChange={handleInputChange} />
+                    </div>
+
+                    <div className="px-4  my-2">
+                        <p className="text-md">Password:</p>
+                        <input className="w-full border-2 border-gray-300 p-2 my-2 rounded-md" type="password" name="password" value={password} onChange={handleInputChange} />
+                    </div>
+
+                    <div className="mt-4">
+                        <button className="rounded-md bg-sky-500 w-full h-10 text-white" onClick={handleSubmit}>Login</button>
+                    </div>
+
+                    <NotificationContainer />
+                </div>
+            </div>
         </div>
-        <div className="form-group">
-          <label>
-            Password:
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={handleInputChange}
-              className="form-control"
-            />
-          </label>
-        </div>
-        <button type="submit" className="btn btn-primary">Log in</button>
-      </form>
-      {schedule && <pre>{JSON.stringify(schedule, null, 2)}</pre>} 
-    </div>
+    </>
   );
 }
 
