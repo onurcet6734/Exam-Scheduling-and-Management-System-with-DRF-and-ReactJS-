@@ -3,18 +3,19 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import 'react-notifications/lib/notifications.css';
 
-
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 import Header from "../../../components/header";
 
 const HallsEdit = (props) => {
 
-    const [name, setName] = useState("");
-    const [seats, setSeats] = useState("");
-    const [item, setItem] = useState({});
+    const [name, setName] = useState(props.data.name);
+    const [seats, setSeats] = useState(props.data.number_of_seats);
+    const [item, setItem] = useState(props.data);
 
     useEffect(() => {
+        setName(props.data.name);
+        setSeats(props.data.number_of_seats);
         setItem(props.data);
     }, [props.data])
 
@@ -49,12 +50,12 @@ const HallsEdit = (props) => {
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Name</p>
-                        <input className="w-full" placeholder="Please input the name..." onChange={(e) => setName(e.target.value)} />
+                        <input className="w-full" placeholder="Please input the name..." value={name} onChange={(e) => setName(e.target.value)} />
                     </div>
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">NumberOfSeats</p>
-                        <input className="w-full" placeholder="Please input the number of seats..." onChange={(e) => setSeats(e.target.value)} />
+                        <input className="w-full" placeholder="Please input the number of seats..." value={seats} onChange={(e) => setSeats(e.target.value)} />
                     </div>
 
                     <button className="bg-blue-600 text-white py-2 px-4 rounded-lg" onClick={() => handleUpdate()}>Save</button>

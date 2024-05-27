@@ -18,7 +18,7 @@ const HallsDetail = (props) => {
 
                 <div className="items-center w-full mx-32">
                     <p className="my-4 px-2 text-2xl font-bold tracking-wider">Detail</p>
-                    <p className="text-lg py-2 font-medium tracking-wider border-b-4">Hall</p>
+                    <p className="text-lg py-2 font-medium tracking-wider border-b-4">Class</p>
 
                     <div className="w-1/3 my-4 flex">
                         <p className="text-md font-medium w-full">Name</p>
@@ -46,7 +46,7 @@ const HallsDetail = (props) => {
 
 
                     <div className="pt-2">
-                        <Link to="/halls" onClick={() => window.location.href = "/halls"} className="text-blue-600">Back to List</Link>
+                        <Link to="/classes" onClick={() => window.location.href = "/classes"} className="text-blue-600">Back to List</Link>
                     </div>
                 </div>
             </div>

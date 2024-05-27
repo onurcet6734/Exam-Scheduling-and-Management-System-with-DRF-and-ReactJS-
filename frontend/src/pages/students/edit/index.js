@@ -9,12 +9,12 @@ const StudentsEdit = (props) => {
 
     const [studentData, setStudentData] = useState([]);
     const [classData, setClassData] = useState([]);
-    const [name, setName] = useState("");
-    const [surName, setSurName] = useState("");
-    const [username, setUsername] = useState("");
+    const [name, setName] = useState(props.data.first_name);
+    const [surName, setSurName] = useState(props.data.last_name);
+    const [username, setUsername] = useState(props.data.username);
     const [selectClass, setSelectClass] = useState("");
     const [selectUser, setSelectUser] = useState("");
-    const [item, setItem] = useState({});
+    const [item, setItem] = useState(props.data);
 
     const token = localStorage.getItem('token');
 
@@ -52,6 +52,9 @@ const StudentsEdit = (props) => {
     }, [])
 
     useEffect(() => {
+        setName(props.data.first_name);
+        setSurName(props.data.last_name);
+        setUsername(props.data.username);
         setItem(props.data);
     }, [props.data])
 
@@ -93,17 +96,17 @@ const StudentsEdit = (props) => {
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Name</p>
-                        <input className="w-full" placeholder="Please input the name..." onChange={(e) => setName(e.target.value)} />
+                        <input className="w-full" placeholder="Please input the name..." value={name} onChange={(e) => setName(e.target.value)} />
                     </div>
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Surname</p>
-                        <input className="w-full" placeholder="Please input the name..." onChange={(e) => setSurName(e.target.value)} />
+                        <input className="w-full" placeholder="Please input the surname..." value={surName} onChange={(e) => setSurName(e.target.value)} />
                     </div>
 
                     <div className="w-1/3 my-4">
                         <p className="text-md font-medium">Username</p>
-                        <input className="w-full" placeholder="Please input the name..." onChange={(e) => setUsername(e.target.value)} />
+                        <input className="w-full" placeholder="Please input the username..." value={username} onChange={(e) => setUsername(e.target.value)} />
                     </div>
 
 

@@ -37,6 +37,7 @@ const ScheduleEdit = (props) => {
     const [item, setItem] = useState({});
 
     useEffect(() => {
+        setSchoolNumber(props.data.school_number);
         setItem(props.data);
     }, [props.data])
 
@@ -161,7 +162,7 @@ const ScheduleEdit = (props) => {
                 <Header />
 
                 <div className="items-center w-full mx-32">
-                    <p className="my-4 px-2 text-2xl font-bold tracking-wider">Create</p>
+                    <p className="my-4 px-2 text-2xl font-bold tracking-wider">Edit</p>
                     <p className="text-lg py-2 font-medium tracking-wider border-b-4">Schedule</p>
 
                     <div className="w-1/3 my-4">
@@ -169,6 +170,7 @@ const ScheduleEdit = (props) => {
                         <input 
                             className="w-full" 
                             placeholder="Please input the school Number..." 
+                            value={schoolNumber}
                             onChange={(e) => setSchoolNumber(e.target.value)}
                         />
                     </div>
