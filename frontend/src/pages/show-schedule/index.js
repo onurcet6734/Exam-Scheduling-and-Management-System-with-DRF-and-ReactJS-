@@ -115,10 +115,10 @@ const ShowStudentSchedule = () => {
                 <table className="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>Ders Adı</th>
-                            <th>Sınav Başlangıç Tarihi</th>
-                            <th>Sınav Bitiş</th>
-                            <th>Salon Adı</th>
+                            <th>Course Name</th>
+                            <th>Exam Start</th>
+                            <th>Exam Finish</th>
+                            <th>Hall Name</th>
                         </tr>
                     </thead>
                     <tbody>
