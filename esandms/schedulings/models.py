@@ -1,5 +1,4 @@
 from django.db import models
-# from accounts.models import UserModel
 from classes.models import Classes
 from exams.models import Exam
 from halls.models import Hall

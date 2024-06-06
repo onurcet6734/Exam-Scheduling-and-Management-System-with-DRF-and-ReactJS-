@@ -10,9 +10,6 @@ from datetime import datetime, timedelta
 import pytz
 
 
-def populate_schedule_detail_url(schedule_id):
-    return reverse("schedulings:scheduling-detail", kwargs={"pk": schedule_id})
-
 class SchedulingViewTestCase(TestCase):
     """Test case for the Scheduling views"""
 
@@ -36,7 +33,12 @@ class SchedulingViewTestCase(TestCase):
         self.assertTrue(is_authenticated)
 
     def test_create_scheduling(self):
-        response = self.client.post(self.url_listCreate, data = {"school_number": "123456", "exam_start_date": "2023-12-12T10:00:00Z", "exam_finish_date": "2023-12-12T11:00:00Z", "classid": self.class_instance.id, "hallid": self.hall.id, "examid": self.exam.id, "user": self.student_user.id }, format='json')
+        response = self.client.post(self.url_listCreate, data = {"school_number": "123456", 
+                                                                 "exam_start_date": "2023-12-12T10:00:00Z", 
+                                                                 "exam_finish_date": "2023-12-12T11:00:00Z", 
+                                                                 "classid": self.class_instance.id, "hallid": self.hall.id, 
+                                                                 "examid": self.exam.id, "user": self.student_user.id }, 
+                                                                 format='json')
         #print response message
         print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -74,4 +76,3 @@ class SchedulingViewTestCase(TestCase):
         updateDelete_url = reverse("schedulings:scheduling-detail", kwargs={"pk": scheduling.id})
         response = self.client.delete(updateDelete_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        
