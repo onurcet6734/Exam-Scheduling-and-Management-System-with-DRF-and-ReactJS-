@@ -23,6 +23,8 @@ class SchedulingListCreateView(generics.ListCreateAPIView):
     
 
     def post(self, request, *args, **kwargs):
+        if User.objects.get(id=request.data["user"]).is_superuser:
+            return Response({"hata": "Yöneticilerin sınav programı olusamaz."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             if not self.service.check_schedules(serializer):
@@ -40,6 +42,8 @@ class SchedulingUpdateDeleteDetailView(generics.RetrieveUpdateDestroyAPIView):
     service = CheckCourseOverlappingService()
 
     def update(self, request, *args, **kwargs):
+        if User.objects.get(id=request.data["user"]).is_superuser:
+            return Response({"hata": "Yöneticilerin sınav programı olusamaz."}, status=status.HTTP_400_BAD_REQUEST)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         if serializer.is_valid():
