@@ -8,9 +8,6 @@ from esandms.jwt_authentication import authenticate_user
 from rest_framework.test import APIClient
 
 
-def populate_customer_detail_url(customer_id):
-    return reverse("halls:update-delete", kwargs={"pk": customer_id})
-
 class HallsCreateAPITestCase(TestCase):
 
     list_create_url = reverse('halls:list-create')
