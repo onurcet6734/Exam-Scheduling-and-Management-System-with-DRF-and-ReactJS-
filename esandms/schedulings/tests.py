@@ -12,7 +12,7 @@ from schedulings.api.services import CheckCourseOverlappingService
 
 
 
-class SchedulingViewTestCase(TestCase):
+class SchedulingAPITestCase(TestCase):
     """Test case for the Scheduling views"""
 
     url_listCreate =  reverse('schedulings:list-create')
@@ -46,6 +46,7 @@ class SchedulingViewTestCase(TestCase):
                                                                  "examid": self.exam.id, "user": self.student_user.id }, 
                                                                  format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     
     def test_get_all_schedulings(self):
         response = self.client.get(self.url_listCreate)
@@ -78,6 +79,38 @@ class SchedulingViewTestCase(TestCase):
                                                examid=self.exam, user=self.student_user)
         response = self.client.delete(reverse('schedulings:update-delete', kwargs={'pk': scheduling.id}))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_create_scheduling_with_overlap(self):
+        Scheduling.objects.create(school_number='123456', exam_start_date=self.start_time, 
+                                exam_finish_date=self.end_time, classid=self.class_instance, 
+                                hallid=self.hall, examid=self.exam, user=self.student_user)
+
+        response = self.client.post(self.url_listCreate, data = {"school_number": "123456", 
+                                                                "exam_start_date": self.start_time.strftime("%Y-%m-%dT%H:%M:%SZ"), 
+                                                                "exam_finish_date": (self.start_time + timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ"), 
+                                                                "classid": self.class_instance.id, "hallid": self.hall.id, 
+                                                                "examid": self.exam.id, "user": self.student_user.id }, 
+                                                                format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_scheduling_with_overlap(self):
+        # Create two initial schedulings
+        scheduling1 = Scheduling.objects.create(school_number='123456', exam_start_date=self.start_time, 
+                                                exam_finish_date=self.end_time, classid=self.class_instance, 
+                                                hallid=self.hall, examid=self.exam, user=self.student_user)
+        scheduling2 = Scheduling.objects.create(school_number='123457', exam_start_date=self.end_time + timedelta(hours=1), 
+                                                exam_finish_date=self.end_time + timedelta(hours=2), classid=self.class_instance, 
+                                                hallid=self.hall, examid=self.exam, user=self.student_user)
+
+        # Try to update scheduling2 to overlap with scheduling1
+        response = self.client.put(reverse('schedulings:update-delete', kwargs={'pk': scheduling2.id}), 
+                                data = {"school_number": "123457", 
+                                        "exam_start_date": self.start_time.strftime("%Y-%m-%dT%H:%M:%SZ"), 
+                                        "exam_finish_date": (self.start_time + timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ"), 
+                                        "classid": self.class_instance.id, "hallid": self.hall.id, 
+                                        "examid": self.exam.id, "user": self.student_user.id }, 
+                                format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 class StudentTestCase(TestCase):
     """Test case for the ShowStudentSchedule view"""

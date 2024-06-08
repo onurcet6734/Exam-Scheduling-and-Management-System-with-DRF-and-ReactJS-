@@ -14,7 +14,6 @@ class ClassesAPITestCase(TestCase):
     
     list_create_url = reverse('classes:list-create')
 
-
     def setUp(self):
         self.client = APIClient()
         self.username = 'uniproject'

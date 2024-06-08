@@ -8,7 +8,7 @@ from esandms.jwt_authentication import authenticate_user
 from rest_framework.test import APIClient
 
 
-class HallsCreateAPITestCase(TestCase):
+class HallsAPITestCase(TestCase):
 
     list_create_url = reverse('halls:list-create')
 
